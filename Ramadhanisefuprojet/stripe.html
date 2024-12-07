@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement avec Stripe</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .pay-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            background-color: #003366; /* Couleur bleu foncé */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            line-height: 1; /* Ajuste le centre de la flèche */
+        }
+        .pay-text {
+            margin-top: 8px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="header"></div>
+    <div class="container">
+        <h1>Payer avec Stripe</h1>
+        <div class="pay-button" id="pay-button">
+            <div class="circle">→</div>
+            <div class="pay-text">Payer</div>
+        </div>
+        <div id="response"></div>
+    </div>
+    <script>
+        // Charger le header
+        fetch('header.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur lors du chargement du header : ' + response.statusText);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('header').innerHTML = data;
+            })
+            .catch(error => console.error('Erreur de chargement du header:', error));
+
+        const stripe = Stripe('pk_test_51QRrtvJemyrDvvPRxvgJQ0C6s7VLS5uquqKy3ieZk2l47wuOScqvpSuqSDb8IVZV5ARq79yWl06xpHpiqmcBtdcs00VvQyKgHf'); 
+
+        document.getElementById('pay-button').addEventListener('click', async () => {
+            
+            const amountInCents = 2000; 
+            const currency = 'usd'; 
+
+            // Créer une session de checkout
+            const response = await fetch('/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ amount: amountInCents, currency: currency }),
+            });
+
+            // Vérification de la réponse
+            if (!response.ok) {
+                const error = await response.text();
+                console.error('Erreur lors de la création de la session de paiement:', error);
+                document.getElementById('response').textContent = 'Erreur lors de la création de la session de paiement. Veuillez réessayer.';
+                return;
+            }
+
+            const { id } = await response.json();
+
+            // Rediriger vers la page de paiement Stripe
+            stripe.redirectToCheckout({ sessionId: id });
+        });
+    </script>
+</body>
+</html>

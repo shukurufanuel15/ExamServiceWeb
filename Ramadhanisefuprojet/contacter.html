@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire de Contact</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column; 
+            justify-content: center;
+            align-items: center;
+            height: 100vh; 
+            margin: 0; 
+            background-color: #f4f4f4; 
+            font-family: Arial, sans-serif; 
+        }
+
+        h1 {
+            margin-top: 10px;
+            color: black;
+        }
+
+        h2 {
+            font-size: 10px;
+        }
+
+        form {
+            width: 30%; 
+            background-color: white; 
+            padding: 30px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        label {
+            margin-top: 10px; 
+            display: block; 
+        }
+
+        input, textarea {
+            width: 100%; 
+            margin-bottom: 15px; 
+            padding: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            font-size: 14px; 
+        }
+
+        button {
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 10px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 16px; 
+        }
+
+        button:hover {
+            background-color: #0056b3; 
+        }
+
+        a {
+            margin-top: 5px; 
+            color: #007bff; 
+            text-decoration: none; 
+        }
+
+        a:hover {
+            text-decoration: underline; 
+        }
+    </style>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfafrCGrTUq2Twu2lMUKkooS6wbgSOQ1Q",
+            authDomain: "sefuprojet.firebaseapp.com",
+            databaseURL: "https://sefuprojet-default-rtdb.firebaseio.com",
+            projectId: "sefuprojet",
+            storageBucket: "sefuprojet.firebasestorage.app",
+            messagingSenderId: "1071092878392",
+            appId: "1:1071092878392:web:1556594d0fff5a3a77eacd",
+            measurementId: "G-P84BYNNYZ3"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        window.db = db;
+
+        // Function to load header
+        async function loadHeader() {
+            const response = await fetch('header.html');
+            const text = await response.text();
+            document.getElementById('header').innerHTML = text;
+        }
+
+        // Load header on page load
+        window.onload = loadHeader;
+    </script>
+</head>
+<body>
+    <div id="header"></div>
+    
+    <form id="contact">
+        <label for="nom">Nom:</label>
+        <input type="text" id="nom" name="nom" required>
+
+        <label for="prenom">Prénom:</label>
+        <input type="text" id="prenom" name="prenom" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="numero_telephone">Numéro de téléphone:</label>
+        <input type="text" id="numero_telephone" name="numero_telephone" required>
+
+        <label for="adresse">Adresse:</label>
+        <input type="text" id="adresse" name="adresse" required>
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" required></textarea>
+
+        <button type="submit" id="submit">Envoyer</button>
+    </form>
+
+    <h2>Contactez-nous sur WhatsApp</h2>
+    <a href="https://wa.me/25779909070" target="_blank">WhatsApp</a>
+
+    <script type="module" src="contact.js" defer></script>
+</body>
+</html>

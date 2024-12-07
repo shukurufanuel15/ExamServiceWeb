@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Météo de la ville</title>
+    <style>
+        /* Styles globaux */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; /* Prend toute la hauteur de la fenêtre */
+        }
+
+        /* Styles pour le conteneur principal */
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%; /* Largeur adaptable */
+            max-width: 400px; /* Largeur maximale */
+            margin: 20px; /* Marge pour éviter que ça touche les bords */
+        }
+
+        /* Styles pour les titres */
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Styles pour les champs de saisie */
+        input {
+            padding: 10px;
+            width: 100%; /* Prend toute la largeur du conteneur */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px; /* Marge en bas pour espacer les éléments */
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styles pour le bouton */
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%; /* Prend toute la largeur du conteneur */
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Couleur de survol */
+        }
+
+        /* Styles pour le résultat de la météo */
+        #weatherResult {
+            margin-top: 20px;
+            color: #333;
+            font-size: 18px; /* Taille de police pour le résultat */
+        }
+    </style>
+</head>
+<body>
+    <div id="header"></div> <!-- Placeholder pour le header -->
+    <div class="container">
+        <h1>Météo</h1>
+        <input type="text" id="city" placeholder="Entrez une ville">
+        <button id="getWeather">Obtenir la météo</button>
+        <div id="weatherResult"></div>
+    </div>
+    <script>
+        // Charger le header
+        fetch('header.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur de chargement du header : ' + response.statusText);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('header').innerHTML = data;
+            })
+            .catch(error => console.error('Erreur de chargement du header:', error));
+    </script>
+    <script src="http://localhost:3000/meteo.js"></script>
+</body>
+</html>

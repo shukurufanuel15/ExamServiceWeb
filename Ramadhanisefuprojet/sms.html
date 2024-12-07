@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envoyer un SMS avec Twilio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 60px 20px;
+            margin-top: 50px; 
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Ombre plus visible */
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre pour les champs d'entrée et le bouton */
+        }
+        button {
+            background-color: darkblue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3; /* Couleur de survol pour le bouton */
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="header"></div> <!-- Placeholder for the header -->
+    <div class="container">
+        <h1>Envoyer un SMS</h1>
+        <form id="smsForm">
+            <input type="text" id="phone" placeholder="Numéro de téléphone" required>
+            <input type="text" id="message" placeholder="Votre message" required>
+            <button type="submit">Envoyer</button>
+        </form>
+        <div id="response" class="hidden"></div>
+    </div>
+    <script>
+        // Charger le header
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header').innerHTML = data;
+            })
+            .catch(error => console.error('Erreur de chargement du header:', error));
+
+        document.getElementById('smsForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const to = document.getElementById('phone').value;
+            const message = document.getElementById('message').value;
+
+            fetch('/send-sms', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ to: to, message: message })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur de réseau');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('response').textContent = data.status;
+                document.getElementById('response').classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Erreur', error);
+                document.getElementById('response').textContent = "Une erreur est survenue.";
+                document.getElementById('response').classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
